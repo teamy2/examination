@@ -1,14 +1,27 @@
 mod routes;
 mod schema;
 
+use axum::http::StatusCode;
 use axum::routing::{get, post};
 use diesel::{Connection, PgConnection};
+use diesel_async::pooled_connection::deadpool::Object;
 use diesel_async::pooled_connection::{deadpool::Pool, AsyncDieselConnectionManager};
-use diesel_async::AsyncPgConnection;
+use diesel_async::{AsyncConnection, AsyncPgConnection};
 use std::{net::SocketAddr, sync::Arc};
 
 pub struct AppState {
 	pub db: Pool<AsyncPgConnection>,
+}
+
+impl AppState {
+	pub async fn connection(
+		&self,
+	) -> Result<Object<AsyncDieselConnectionManager<AsyncPgConnection>>, StatusCode> {
+		self.db
+			.get()
+			.await
+			.map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)
+	}
 }
 
 #[tokio::main]

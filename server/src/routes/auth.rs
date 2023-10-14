@@ -1,6 +1,5 @@
 use crate::schema;
 use crate::AppState;
-use axum::http::StatusCode;
 use axum::{extract, response::IntoResponse, Json};
 use diesel::ExpressionMethods;
 
@@ -34,13 +33,7 @@ pub async fn register(
 			schema::user::username.eq(data.username),
 			schema::user::password.eq(&hashed_password[..]),
 		))
-		.execute(
-			&mut state
-				.db
-				.get()
-				.await
-				.map_err(|_| axum::http::StatusCode::INTERNAL_SERVER_ERROR)?,
-		)
+		.execute(&mut state.connection().await?)
 		.await;
 
 	Ok(if result.is_err() {
