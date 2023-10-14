@@ -12,3 +12,11 @@ pub async fn root(extract::Json(data): extract::Json<Data>) -> impl IntoResponse
 		number: data.number,
 	})
 }
+
+pub async fn login(extract::Json(data): extract::Json<Data>) -> impl IntoResponse {
+	"sup"
+}
+
+pub async fn register(extract::Json(data): extract::Json<Data>) -> impl IntoResponse {
+	"sup"
+}
