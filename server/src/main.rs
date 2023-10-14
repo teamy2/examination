@@ -14,9 +14,7 @@ pub struct AppState {
 }
 
 impl AppState {
-	pub async fn connection(
-		&self,
-	) -> Result<Object<AsyncDieselConnectionManager<AsyncPgConnection>>, StatusCode> {
+	pub async fn connection(&self) -> Result<Object<AsyncPgConnection>, StatusCode> {
 		self.db
 			.get()
 			.await
