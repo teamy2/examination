@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Question, Quiz } from "$lib/api";
+	import QuizQuestions from "$lib/components/QuizQuestions.svelte";
 
 	function defaultQuestion() {
 		return {
@@ -15,8 +16,6 @@
 		description: "",
 		questions: [defaultQuestion()] as Question[],
 	} satisfies Quiz;
-
-	import QuizQuestions from "$lib/components/QuizQuestions.svelte";
 </script>
 
 <div class="pb-5">
