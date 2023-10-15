@@ -1,6 +1,14 @@
 // @generated automatically by Diesel CLI.
 
 diesel::table! {
+	completion (quiz, user) {
+		quiz -> Int4,
+		user -> Int4,
+		score -> Int2,
+	}
+}
+
+diesel::table! {
 	question (id) {
 		id -> Int4,
 		quiz -> Int4,
@@ -28,4 +36,4 @@ diesel::table! {
 	}
 }
 
-diesel::allow_tables_to_appear_in_same_query!(question, quiz, user,);
+diesel::allow_tables_to_appear_in_same_query!(completion, question, quiz, user,);

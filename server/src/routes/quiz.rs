@@ -1,7 +1,9 @@
 use std::collections::HashMap;
 
-use axum::Json;
-use axum::{extract, http::StatusCode};
+use axum::{
+	extract::{Json, Path, Query, State},
+	http::StatusCode,
+};
 use diesel::{ExpressionMethods, QueryDsl, SelectableHelper};
 use diesel_async::{scoped_futures::ScopedFutureExt, AsyncConnection, RunQueryDsl};
 
@@ -10,8 +12,8 @@ use crate::schema;
 use crate::AppState;
 
 pub async fn create(
-	extract::State(state): extract::State<AppState>,
-	extract::Json(mut data): extract::Json<QuizExternal>,
+	State(state): State<AppState>,
+	Json(mut data): Json<QuizExternal>,
 ) -> crate::RouteResult<StatusCode> {
 	data.strip_id();
 
@@ -52,14 +54,12 @@ pub async fn create(
 			.scope_boxed()
 		})
 		.await
-		.map_err(|_| axum::http::StatusCode::INTERNAL_SERVER_ERROR)?;
+		.map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
 
-	Ok(axum::http::StatusCode::CREATED)
+	Ok(StatusCode::CREATED)
 }
 
-pub async fn get_all(
-	extract::State(state): extract::State<AppState>,
-) -> crate::RouteResult<Json<Vec<QuizExternal>>> {
+pub async fn get_all(State(state): State<AppState>) -> crate::RouteResult<Json<Vec<QuizExternal>>> {
 	let quizzes = schema::quiz::table
 		.select(Quiz::as_select())
 		.get_results::<Quiz>(&mut state.connection().await?)
@@ -87,8 +87,8 @@ pub async fn get_all(
 }
 
 pub async fn get_one(
-	extract::State(state): extract::State<AppState>,
-	extract::Path(id): extract::Path<i32>,
+	State(state): State<AppState>,
+	Path(id): Path<i32>,
 ) -> crate::RouteResult<Json<QuizExternal>> {
 	let mut quiz: QuizExternal = schema::quiz::table
 		.select(Quiz::as_select())
@@ -103,7 +103,7 @@ pub async fn get_one(
 		.filter(schema::question::quiz.eq(id))
 		.get_results::<Question>(&mut state.connection().await?)
 		.await
-		.map_err(|_| axum::http::StatusCode::INTERNAL_SERVER_ERROR)?
+		.map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?
 		.into_iter()
 		.map(|q| q.into())
 		.collect();
@@ -112,20 +112,20 @@ pub async fn get_one(
 }
 
 #[derive(serde::Deserialize)]
-pub struct AuthorInput {
-	pub author: i32,
+pub struct UserInput {
+	pub user: i32,
 }
 
 pub async fn get_created(
-	extract::State(state): extract::State<AppState>,
-	extract::Query(query): extract::Query<AuthorInput>,
+	State(state): State<AppState>,
+	Query(input): Query<UserInput>,
 ) -> crate::RouteResult<Json<Vec<QuizExternal>>> {
 	let quizzes = schema::quiz::table
 		.select(Quiz::as_select())
-		.filter(schema::quiz::author.eq(query.author))
+		.filter(schema::quiz::author.eq(input.user))
 		.get_results::<Quiz>(&mut state.connection().await?)
 		.await
-		.map_err(|_| axum::http::StatusCode::INTERNAL_SERVER_ERROR)?;
+		.map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
 
 	let mut quizzes = quizzes
 		.into_iter()
@@ -136,7 +136,7 @@ pub async fn get_created(
 		.select(Question::as_select())
 		.get_results::<Question>(&mut state.connection().await?)
 		.await
-		.map_err(|_| axum::http::StatusCode::INTERNAL_SERVER_ERROR)?;
+		.map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
 
 	for question in questions {
 		if let Some(quiz) = quizzes.get_mut(&question.quiz) {
@@ -145,4 +145,70 @@ pub async fn get_created(
 	}
 
 	Ok(Json(quizzes.into_values().collect()))
+}
+
+#[derive(serde::Serialize)]
+pub struct CompleteOutput {
+	pub results: Vec<Vec<bool>>,
+	pub correct_count: usize,
+}
+
+pub async fn complete(
+	State(state): State<AppState>,
+	Path(id): Path<i32>,
+	Query(input): Query<UserInput>,
+	Json(answers): Json<Vec<Vec<i16>>>,
+) -> crate::RouteResult<Json<CompleteOutput>> {
+	let questions: Vec<Question> = schema::question::table
+		.select(Question::as_select())
+		.filter(schema::question::quiz.eq(id))
+		.order(schema::question::id.asc())
+		.get_results::<Question>(&mut state.connection().await?)
+		.await
+		.map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
+
+	// construct a 2d array of booleans, where each row is a question and each column is
+	// whether the user correctly selected (or didnt select) the option
+	let mut results = Vec::with_capacity(questions.len());
+	let mut correct_count = 0;
+
+	for (question, answer) in questions.into_iter().zip(answers.into_iter()) {
+		let mut question_correct = Vec::with_capacity(answer.len());
+		let mut all_correct = true;
+
+		for i in 0..question.options.len() {
+			let is_answer = question.answers.contains(&Some(i as i16));
+			let is_selected = answer.contains(&(i as i16));
+
+			question_correct.push(is_answer == is_selected);
+
+			if is_answer != is_selected {
+				all_correct = false;
+			}
+		}
+
+		results.push(question_correct);
+
+		if all_correct {
+			correct_count += 1;
+		}
+	}
+
+	diesel::insert_into(schema::completion::table)
+		.values((
+			schema::completion::quiz.eq(id),
+			schema::completion::user.eq(input.user),
+			schema::completion::score.eq(correct_count as i16),
+		))
+		.on_conflict((schema::completion::quiz, schema::completion::user))
+		.do_update()
+		.set(schema::completion::score.eq(correct_count as i16))
+		.execute(&mut state.connection().await?)
+		.await
+		.map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
+
+	Ok(Json(CompleteOutput {
+		results,
+		correct_count,
+	}))
 }

@@ -13,8 +13,8 @@ pub struct AuthInput {
 }
 
 #[derive(serde::Serialize)]
-pub struct AuthResponse {
-	message: String,
+pub struct AuthResponse<'a> {
+	message: &'a str,
 	id: i32,
 }
 
@@ -23,7 +23,7 @@ pub async fn login(
 	extract::Json(data): extract::Json<AuthInput>,
 ) -> crate::RouteResult<impl IntoResponse> {
 	let hashed_password = hash(data.password);
-	let result = schema::user::table
+	let result: Result<i32, diesel::result::Error> = schema::user::table
 		.select(schema::user::id)
 		.filter(schema::user::username.eq(data.username))
 		.filter(schema::user::password.eq(hashed_password))
@@ -32,7 +32,7 @@ pub async fn login(
 
 	Ok(match result {
 		Ok(id) => Json(AuthResponse {
-			message: "Success".to_string(),
+			message: "Logged in successfully.",
 			id,
 		})
 		.into_response(),

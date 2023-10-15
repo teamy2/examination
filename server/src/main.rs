@@ -41,10 +41,11 @@ async fn main() {
 	let state = State { db: get_pool() };
 
 	let app = axum::Router::new()
-		.route("/login", post(routes::auth::login))
-		.route("/register", post(routes::auth::register))
+		.route("/auth/login", post(routes::auth::login))
+		.route("/auth/register", post(routes::auth::register))
 		.route("/quizzes/create", post(routes::quiz::create))
 		.route("/quizzes/:id", get(routes::quiz::get_one))
+		.route("/quizzes/:id/complete", post(routes::quiz::complete))
 		.route("/quizzes/created", get(routes::quiz::get_created))
 		.route("/quizzes", get(routes::quiz::get_all))
 		.with_state(Arc::new(state));
