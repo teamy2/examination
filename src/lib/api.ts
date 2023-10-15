@@ -26,7 +26,7 @@ export async function getQuizzes(): Promise<Quiz[]> {
 }
 
 export async function getQuiz(id: number): Promise<Quiz> {
-	const response = await get('/quizzes' + id);
+	const response = await get('/quizzes/' + id);
 	const quiz: Quiz = await response.json();
 	return quiz;
 }
