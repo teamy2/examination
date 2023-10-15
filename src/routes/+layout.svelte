@@ -1,15 +1,21 @@
+<!-- @format -->
 <script lang="ts">
-	import { page } from '$app/stores';
-	import '../app.css';
+	import { page } from "$app/stores";
+	import "../app.css";
 </script>
+<<<<<<< HEAD
 
 {#if $page.url.pathname === '/login' || $page.url.pathname === '/'}
+=======
+{#if $page.url.pathname === "/login"}
+>>>>>>> 513cf76 (feat: added quiz cards)
 	<slot />
 {:else}
 	<div class="min-h-screen">
 		<div class="navbar">
 			<div class="flex-1">
-				<a class="btn btn-ghost normal-case text-xl red">Examination</a>
+				<a href="/" class="btn btn-ghost normal-case text-xl red">Examination</a
+				>
 			</div>
 		</div>
 		<div class="h-full p-8">

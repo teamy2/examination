@@ -9,4 +9,9 @@ export const quizzes = [{
     author: "ape",
     title: "ape",
 description: "ape ape ape ape ape ape ape ape ape ape ape ape ape ape ape ape"
-}]
+},
+{id : 456,
+    author: "ape",
+    title: "ape",
+description: "ape ape ape ape ape ape ape ape ape ape ape ape ape ape ape ape"
+},]

@@ -1,9 +1,27 @@
+<!-- @format -->
 <script lang="ts">
-	import { quizzes } from '$lib/quizzes';
+	import { quizzes } from "$lib/quizzes";
 </script>
-
+<div class="flex flex-row flex-wrap justify-center">
 {#each quizzes as quiz, index}
-	<div>
-		<a href="/quizzes/{quiz.id}">Go to quiz {quiz.title}</a>
+<a href="/quizzes/{quiz.id}">
+	<div class="card w-96 bg-base-100 image-full p-8 hover:scale-105 transition-all duration-300">
+		<figure>
+			<img
+				src="https://images.unsplash.com/photo-1505751172876-fa1923c5c528?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+				alt="Shoes"
+			/>
+		</figure>
+		<div class="card-body">
+			<h2 class="card-title">{quiz.title}</h2>
+			<p>{quiz.description}</p>
+			<div class="card-actions justify-center">
+				
+			</div>
+		</div>
 	</div>
+	<div>
+	</div>
+</a>
 {/each}
+</div>
