@@ -21,9 +21,6 @@
 				class="input input-bordered"
 				required
 			/>
-			<label class="label">
-				<a href="#" class="label-text-alt link link-hover">Forgot password?</a>
-			</label>
 		</div>
 		<div class="form-control mt-6">
 			<button class="btn btn-primary">Login</button>
