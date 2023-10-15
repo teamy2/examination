@@ -49,6 +49,10 @@ pub async fn register(
 	extract::State(state): extract::State<Arc<AppState>>,
 	extract::Json(data): extract::Json<AuthInput>,
 ) -> Result<impl IntoResponse, axum::http::StatusCode> {
+	if data.username.len() > 16 {
+		return Ok(axum::http::StatusCode::BAD_REQUEST);
+	}
+
 	let hashed_password = hash(data.password);
 	let result = diesel::insert_into(schema::user::table)
 		.values((

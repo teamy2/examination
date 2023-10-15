@@ -3,10 +3,9 @@ mod schema;
 
 use axum::http::StatusCode;
 use axum::routing::{get, post};
-use diesel::{Connection, PgConnection};
 use diesel_async::pooled_connection::deadpool::Object;
 use diesel_async::pooled_connection::{deadpool::Pool, AsyncDieselConnectionManager};
-use diesel_async::{AsyncConnection, AsyncPgConnection};
+use diesel_async::AsyncPgConnection;
 use std::{net::SocketAddr, sync::Arc};
 
 pub struct AppState {
@@ -31,6 +30,7 @@ async fn main() {
 	let app = axum::Router::new()
 		.route("/login", post(routes::auth::login))
 		.route("/register", post(routes::auth::register))
+		.route("/quiz/create", post(routes::quiz::create))
 		.with_state(Arc::new(state));
 
 	let addr = SocketAddr::from(([0, 0, 0, 0], 8000));
