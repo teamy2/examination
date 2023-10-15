@@ -1,7 +1,20 @@
 <!-- @format -->
 <script lang="ts">
 	import { page } from '$app/stores';
+	import { user } from '$lib/auth';
+	import { onMount } from 'svelte';
+
 	import '../app.css';
+
+	onMount(() => {
+		const u = localStorage.getItem('user');
+		if (u) user.set(JSON.parse(u));
+
+		user.subscribe(u => {
+			if (u) localStorage.setItem('user', JSON.stringify(u));
+			else localStorage.removeItem('user');
+		});
+	});
 </script>
 
 {#if $page.url.pathname === '/login' || $page.url.pathname === '/'}

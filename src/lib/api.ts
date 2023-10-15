@@ -1,4 +1,4 @@
-const url = 'http://localhost:8000';
+const url = 'http://localhost:8001';
 
 export type Quiz = {
 	id?: number;
@@ -18,6 +18,11 @@ export type User = {
 	username: string;
 	password: string;
 };
+
+export type UserData = {
+	id: number;
+	username: string;
+}
 
 export async function getQuizzes(): Promise<Quiz[]> {
 	const response = await get('/quizzes/');
@@ -40,13 +45,15 @@ export async function getCreatedQuizzes(): Promise<Quiz[]> {
 export async function login(
 	username: string,
 	password: string
-): Promise<boolean> {
+): Promise<UserData | undefined> {
 	const response = await post<User>('/auth/login', {
 		username: username,
 		password: password,
 	});
 
-	return response.status === 200;
+	if (response.status !== 200) return undefined;
+
+	return response.json();
 }
 
 export async function register(

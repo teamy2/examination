@@ -5,7 +5,7 @@
 
 	const id = parseInt($page.params.id);
 
-	const quiz = quizzes.find((q) => q.id === id)!;
+	const quiz = quizzes.find(q => q.id === id)!;
 </script>
 
 <div>{quiz.author}</div>

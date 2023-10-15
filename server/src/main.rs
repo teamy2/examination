@@ -61,7 +61,7 @@ async fn main() {
 		)
 		.with_state(Arc::new(state));
 
-	let addr = SocketAddr::from(([0, 0, 0, 0], 8000));
+	let addr = SocketAddr::from(([0, 0, 0, 0], 8001));
 
 	axum::Server::bind(&addr)
 		.serve(app.into_make_service_with_connect_info::<SocketAddr>())
