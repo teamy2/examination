@@ -51,7 +51,14 @@ async fn main() {
 		.route("/quizzes/created", get(routes::quiz::get_created))
 		.route("/quizzes/completed", get(routes::quiz::get_completed))
 		.route("/quizzes", get(routes::quiz::get_all))
-		.layer(ServiceBuilder::new().layer(tower_http::cors::CorsLayer::new().allow_origin(Any)))
+		.layer(
+			ServiceBuilder::new().layer(
+				tower_http::cors::CorsLayer::new()
+					.allow_origin(Any)
+					.allow_headers(Any)
+					.allow_methods(Any),
+			),
+		)
 		.with_state(Arc::new(state));
 
 	let addr = SocketAddr::from(([0, 0, 0, 0], 8000));
