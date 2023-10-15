@@ -1,4 +1,4 @@
-<div class="bg-gradient-to-r from-indigo-500">
+<div class="bg-gradient-to-r from-indigo-500 to-blue-500 min-h-screen">
 	<div class="navbar">
 		<div class="flex-1">
 			<a class="btn btn-ghost normal-case text-xl red">Examination</a>
