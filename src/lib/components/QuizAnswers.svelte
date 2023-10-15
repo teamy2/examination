@@ -24,5 +24,4 @@
 
 		<div class="card-actions justify-end" />
 	</div>
-	<button class="btn btn-error" on:click={() => dispatch("delete")}>X</button>
 </div>
