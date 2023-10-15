@@ -147,6 +147,43 @@ pub async fn get_created(
 	Ok(Json(quizzes.into_values().collect()))
 }
 
+pub async fn get_completed(
+	State(state): State<AppState>,
+	Query(input): Query<UserInput>,
+) -> crate::RouteResult<Json<Vec<QuizExternal>>> {
+	let completed = schema::completion::table
+		.select(schema::completion::quiz)
+		.filter(schema::completion::user.eq(input.user))
+		.into_boxed();
+
+	let quizzes = schema::quiz::table
+		.select(Quiz::as_select())
+		.filter(schema::quiz::author.eq(input.user))
+		.filter(schema::quiz::id.eq_any(completed))
+		.get_results::<Quiz>(&mut state.connection().await?)
+		.await
+		.map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
+
+	let mut quizzes = quizzes
+		.into_iter()
+		.map(|q| (q.id, q.into()))
+		.collect::<HashMap<_, QuizExternal>>();
+
+	let questions = schema::question::table
+		.select(Question::as_select())
+		.get_results::<Question>(&mut state.connection().await?)
+		.await
+		.map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
+
+	for question in questions {
+		if let Some(quiz) = quizzes.get_mut(&question.quiz) {
+			quiz.questions.push(question.into());
+		}
+	}
+
+	Ok(Json(quizzes.into_values().collect()))
+}
+
 #[derive(serde::Serialize)]
 pub struct CompleteOutput {
 	pub results: Vec<Vec<bool>>,
