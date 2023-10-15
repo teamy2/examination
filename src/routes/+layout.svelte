@@ -1,10 +1,10 @@
 <!-- @format -->
 <script lang="ts">
-	import { page } from '$app/stores';
-	import '../app.css';
+	import { page } from "$app/stores";
+	import "../app.css";
 </script>
 
-{#if $page.url.pathname === '/login' || $page.url.pathname === '/'}
+{#if $page.url.pathname === "/login" || $page.url.pathname === "/"}
 	<slot />
 {:else}
 	<div class="min-h-screen">
