@@ -3,7 +3,7 @@
 	import '../app.css';
 </script>
 
-{#if $page.url.pathname === '/login'}
+{#if $page.url.pathname === '/login' || $page.url.pathname === '/'}
 	<slot />
 {:else}
 	<div class="min-h-screen">
