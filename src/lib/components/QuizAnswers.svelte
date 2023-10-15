@@ -1,24 +1,18 @@
 <script lang="ts">
-	let answers = 1;
+	import { quizzes } from "$lib/quizzes";
+
+	let answers = 4;
 </script>
 
 <div class="card w-full bg-base-200 shadow-xl">
 	<div class="card-body">
-		<input
-			type="text"
-			placeholder="Type Question Here..."
-			class="input w-full max-w-xs card-title"
-		/>
+		<div class="input w-full max-w-xs card-title">Type Question Here...</div>
 
 		<div class="grid gap-2">
 			{#each { length: answers } as _, index}
 				<div class="flex flex-row items-center">
 					<input type="checkbox" class="checkbox col-span-1 checkbox-success" />
-					<input
-						type="text"
-						class="input w-full bg-base-200"
-						placeholder="Answer {index + 1}"
-					/>
+					<div>Answer {index + 1}</div>
 				</div>
 			{/each}
 		</div>
