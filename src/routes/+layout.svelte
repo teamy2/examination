@@ -8,7 +8,7 @@
 	<slot />
 {:else}
 	<div class="min-h-screen">
-		<div class="navbar">
+		<div class="navbar absolute">
 			<div class="flex-1">
 				<a href="/" class="btn btn-ghost normal-case text-xl red">Examination</a
 				>

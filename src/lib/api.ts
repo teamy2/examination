@@ -5,6 +5,12 @@ export type Quiz = {
 	author: string;
 	title: string;
 	description: string;
+	questions?: Question[];
+};
+
+export type Question = {
+	name: string;
+	options: string[];
 };
 
 export type User = {
