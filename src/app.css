@@ -4,7 +4,11 @@
 @tailwind utilities;
 
 @layer components {
-    .btn {
-        @apply normal-case;
-    }
+	.btn {
+		@apply normal-case;
+	}
+}
+
+body {
+	height: 100vh;
 }
