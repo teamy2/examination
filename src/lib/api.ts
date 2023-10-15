@@ -1,4 +1,4 @@
-const url = 'http://192.168.2.15:8000';
+const url = 'http://09a4-142-126-192-12.ngrok-free.app';
 
 export type Quiz = {
 	id?: number;

@@ -1,13 +1,8 @@
 <script lang="ts">
-<<<<<<< HEAD
-	import { quizzes } from '$lib/quizzes';
-=======
 	import { quizzes } from "$lib/quizzes";
 	import { createEventDispatcher } from "svelte";
 
 	const dispatch = createEventDispatcher();
->>>>>>> 95d6abc (feat: add Quiz creation post functionality)
-
 
 	export let question: string;
 	export let options: string[];
@@ -22,7 +17,7 @@
 			{#each { length: options.length } as _, index}
 				<div class="flex flex-row items-center">
 					<input type="checkbox" class="checkbox col-span-1 checkbox-success" />
-					<div> {options}</div>
+					<div>{options}</div>
 				</div>
 			{/each}
 		</div>
