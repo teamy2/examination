@@ -1,12 +1,10 @@
-use crate::schema;
-use crate::AppState;
-use axum::{extract, response::IntoResponse, Json};
-use diesel::ExpressionMethods;
-
-use diesel::QueryDsl;
+use axum::{extract, http::StatusCode, response::IntoResponse, Json};
+use diesel::{ExpressionMethods, QueryDsl};
 use diesel_async::RunQueryDsl;
 use sha2::Digest;
-use std::sync::Arc;
+
+use crate::schema;
+use crate::AppState;
 
 #[derive(serde::Serialize, serde::Deserialize)]
 pub struct AuthInput {
@@ -21,9 +19,9 @@ pub struct AuthResponse {
 }
 
 pub async fn login(
-	extract::State(state): extract::State<Arc<AppState>>,
+	extract::State(state): extract::State<AppState>,
 	extract::Json(data): extract::Json<AuthInput>,
-) -> Result<impl IntoResponse, axum::http::StatusCode> {
+) -> crate::RouteResult<impl IntoResponse> {
 	let hashed_password = hash(data.password);
 	let result = schema::user::table
 		.select(schema::user::id)
@@ -46,9 +44,9 @@ pub async fn login(
 }
 
 pub async fn register(
-	extract::State(state): extract::State<Arc<AppState>>,
+	extract::State(state): extract::State<AppState>,
 	extract::Json(data): extract::Json<AuthInput>,
-) -> Result<impl IntoResponse, axum::http::StatusCode> {
+) -> crate::RouteResult<StatusCode> {
 	if data.username.len() > 16 {
 		return Ok(axum::http::StatusCode::BAD_REQUEST);
 	}
@@ -72,6 +70,5 @@ pub async fn register(
 fn hash(data: impl AsRef<[u8]>) -> Vec<u8> {
 	let mut hasher = sha2::Sha512::new();
 	hasher.update(data.as_ref());
-
 	hasher.finalize().to_vec()
 }

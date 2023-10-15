@@ -1,45 +1,20 @@
+use std::collections::HashMap;
+
+use axum::Json;
+use axum::{extract, http::StatusCode};
+use diesel::{ExpressionMethods, QueryDsl, SelectableHelper};
+use diesel_async::{scoped_futures::ScopedFutureExt, AsyncConnection, RunQueryDsl};
+
+use crate::models::{Question, Quiz, QuizExternal};
 use crate::schema;
 use crate::AppState;
-use axum::extract;
-use axum::response::IntoResponse;
-use diesel::prelude::Queryable;
-use diesel::ExpressionMethods;
-use diesel::QueryDsl;
-use diesel::Selectable;
-use diesel::SelectableHelper;
-use diesel_async::scoped_futures::ScopedFutureExt;
-use diesel_async::AsyncConnection;
-use diesel_async::RunQueryDsl;
-use std::sync::Arc;
-
-#[derive(serde::Deserialize)]
-pub struct QuizInput {
-	author: i32,
-	title: String,
-	description: String,
-	questions: Vec<QuestionInput>,
-}
-
-#[derive(serde::Deserialize)]
-pub struct QuestionInput {
-	name: String,
-	options: Vec<String>,
-	answers: Vec<i16>,
-}
-
-#[derive(Selectable, Queryable)]
-#[diesel(table_name = schema::quiz)]
-pub struct QuizResponse {
-	id: i32,
-	author: i32,
-	title: String,
-	description: String,
-}
 
 pub async fn create(
-	extract::State(state): extract::State<Arc<AppState>>,
-	extract::Json(data): extract::Json<QuizInput>,
-) -> Result<impl IntoResponse, axum::http::StatusCode> {
+	extract::State(state): extract::State<AppState>,
+	extract::Json(mut data): extract::Json<QuizExternal>,
+) -> crate::RouteResult<StatusCode> {
+	data.strip_id();
+
 	state
 		.connection()
 		.await?
@@ -83,11 +58,91 @@ pub async fn create(
 }
 
 pub async fn get_all(
-	extract::State(state): extract::State<Arc<AppState>>,
-) -> Result<impl IntoResponse, axum::http::StatusCode> {
-	let result = schema::quiz::table
-		.select(QuizResponse::as_select())
-		.left_join(rhs)
-		.get_results::<QuizResponse>(&mut state.connection().await?)
-		.await;
+	extract::State(state): extract::State<AppState>,
+) -> crate::RouteResult<Json<Vec<QuizExternal>>> {
+	let quizzes = schema::quiz::table
+		.select(Quiz::as_select())
+		.get_results::<Quiz>(&mut state.connection().await?)
+		.await
+		.map_err(|_| axum::http::StatusCode::INTERNAL_SERVER_ERROR)?;
+
+	let mut quizzes = quizzes
+		.into_iter()
+		.map(|q| (q.id, q.into()))
+		.collect::<HashMap<_, QuizExternal>>();
+
+	let questions = schema::question::table
+		.select(Question::as_select())
+		.get_results::<Question>(&mut state.connection().await?)
+		.await
+		.map_err(|_| axum::http::StatusCode::INTERNAL_SERVER_ERROR)?;
+
+	for question in questions {
+		if let Some(quiz) = quizzes.get_mut(&question.quiz) {
+			quiz.questions.push(question.into());
+		}
+	}
+
+	Ok(Json(quizzes.into_values().collect()))
+}
+
+pub async fn get_one(
+	extract::State(state): extract::State<AppState>,
+	extract::Path(id): extract::Path<i32>,
+) -> crate::RouteResult<Json<QuizExternal>> {
+	let mut quiz: QuizExternal = schema::quiz::table
+		.select(Quiz::as_select())
+		.filter(schema::quiz::id.eq(id))
+		.get_result::<Quiz>(&mut state.connection().await?)
+		.await
+		.map_err(|_| axum::http::StatusCode::INTERNAL_SERVER_ERROR)?
+		.into();
+
+	quiz.questions = schema::question::table
+		.select(Question::as_select())
+		.filter(schema::question::quiz.eq(id))
+		.get_results::<Question>(&mut state.connection().await?)
+		.await
+		.map_err(|_| axum::http::StatusCode::INTERNAL_SERVER_ERROR)?
+		.into_iter()
+		.map(|q| q.into())
+		.collect();
+
+	Ok(Json(quiz))
+}
+
+#[derive(serde::Deserialize)]
+pub struct AuthorInput {
+	pub author: i32,
+}
+
+pub async fn get_created(
+	extract::State(state): extract::State<AppState>,
+	extract::Query(query): extract::Query<AuthorInput>,
+) -> crate::RouteResult<Json<Vec<QuizExternal>>> {
+	let quizzes = schema::quiz::table
+		.select(Quiz::as_select())
+		.filter(schema::quiz::author.eq(query.author))
+		.get_results::<Quiz>(&mut state.connection().await?)
+		.await
+		.map_err(|_| axum::http::StatusCode::INTERNAL_SERVER_ERROR)?;
+
+	let mut quizzes = quizzes
+		.into_iter()
+		.map(|q| (q.id, q.into()))
+		.collect::<HashMap<_, QuizExternal>>();
+
+	let questions = schema::question::table
+		.select(Question::as_select())
+		.get_results::<Question>(&mut state.connection().await?)
+		.await
+		.map_err(|_| axum::http::StatusCode::INTERNAL_SERVER_ERROR)?;
+
+	for question in questions {
+		if let Some(quiz) = quizzes.get_mut(&question.quiz) {
+			quiz.questions.push(question.into());
+		}
+	}
+
+	Ok(Json(quizzes.into_values().collect()))
 }
