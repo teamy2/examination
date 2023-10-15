@@ -2,7 +2,7 @@
 	let answers = 1;
 </script>
 
-<div class="card w-96 bg-base-100 shadow-xl">
+<div class="card w-full bg-base-200 shadow-xl">
 	<div class="card-body">
 		<input
 			type="text"
@@ -10,14 +10,16 @@
 			class="input w-full max-w-xs card-title"
 		/>
 
-		<div class="grid grid-cols-3 gap-2">
+		<div class="grid gap-2">
 			{#each { length: answers } as _, index}
-				<input type="checkbox" class="checkbox col-span-1 checkbox-success" />
-				<input
-					type="text"
-					class="input w-full max-w-xs card-title col-span-2"
-					placeholder="Answer {index + 1}"
-				/>
+				<div class="flex flex-row items-center">
+					<input type="checkbox" class="checkbox col-span-1 checkbox-success" />
+					<input
+						type="text"
+						class="input w-full bg-base-200"
+						placeholder="Answer {index + 1}"
+					/>
+				</div>
 			{/each}
 		</div>
 
