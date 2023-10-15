@@ -6,11 +6,7 @@
 
 <div class="card w-full bg-base-200 shadow-xl">
 	<div class="card-body">
-		<input
-			type="text"
-			placeholder="Type Question Here..."
-			class="input w-full max-w-xs card-title"
-		/>
+		<div class="input w-full max-w-xs card-title">Type Question Here...</div>
 
 		<div class="grid gap-2">
 			{#each { length: answers } as _, index}
