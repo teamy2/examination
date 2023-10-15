@@ -1,5 +1,12 @@
 <script lang="ts">
+<<<<<<< HEAD
 	import { quizzes } from '$lib/quizzes';
+=======
+	import { quizzes } from "$lib/quizzes";
+	import { createEventDispatcher } from "svelte";
+
+	const dispatch = createEventDispatcher();
+>>>>>>> 95d6abc (feat: add Quiz creation post functionality)
 
 
 	export let question: string;
@@ -22,4 +29,5 @@
 
 		<div class="card-actions justify-end" />
 	</div>
+	<button class="btn btn-error" on:click={() => dispatch("delete")}>X</button>
 </div>
