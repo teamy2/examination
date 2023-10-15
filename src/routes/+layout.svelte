@@ -25,7 +25,7 @@
 				</a>
 			</div>
 		</div>
-		<div class="h-full p-8">
+		<div class="h-full">
 			<slot />
 		</div>
 	</div>
