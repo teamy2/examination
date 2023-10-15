@@ -3,12 +3,8 @@
 	import { page } from "$app/stores";
 	import "../app.css";
 </script>
-<<<<<<< HEAD
 
 {#if $page.url.pathname === '/login' || $page.url.pathname === '/'}
-=======
-{#if $page.url.pathname === "/login"}
->>>>>>> 513cf76 (feat: added quiz cards)
 	<slot />
 {:else}
 	<div class="min-h-screen">
