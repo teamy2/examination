@@ -47,3 +47,7 @@ fn get_pool() -> Pool<AsyncPgConnection> {
 
 	Pool::builder(manager).max_size(5).build().unwrap()
 }
+
+fn ad(s: impl AsRef<[u8]>) {
+	let t = s.as_ref();
+}
