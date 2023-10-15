@@ -1,6 +1,12 @@
 <!-- @format -->
 <script lang="ts">
-	import { quizzes } from '$lib/quizzes';
+	import { getQuizzes, type Quiz } from '$lib/api';
+	import { onMount } from 'svelte';
+
+	let quizzes: Quiz[] = [];
+	onMount(async () => {
+		quizzes = await getQuizzes();
+	});
 </script>
 
 <h1 class="text-center text-3xl py-8">Available Quizzes</h1>
