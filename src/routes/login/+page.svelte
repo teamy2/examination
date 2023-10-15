@@ -34,10 +34,11 @@
 			</label>
 		</div>
 		<div class="form-control">
-			<label class="label">
+			<label class="label" for="password">
 				<span class="label-text">Password</span>
 			</label>
 			<input
+				id="password"
 				type="password"
 				placeholder="password"
 				class="input input-bordered"

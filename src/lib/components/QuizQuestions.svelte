@@ -1,4 +1,7 @@
 <script lang="ts">
+	import { createEventDispatcher } from "svelte";
+
+	const dispatch = createEventDispatcher();
 	let answersAmount = 1;
 
 	export let question = {
@@ -10,6 +13,11 @@
 
 <div class="card w-full bg-base-200 shadow-xl">
 	<div class="card-body">
+		<button
+			on:click={() => dispatch("remove")}
+			class="btn btn-md btn-circle btn-ghost absolute right-2 top-2 text-2xl"
+			>✕</button
+		>
 		<input
 			type="text"
 			placeholder="Type Question Here..."

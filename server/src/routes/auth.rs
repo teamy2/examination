@@ -16,6 +16,7 @@ pub struct AuthInput {
 pub struct AuthResponse<'a> {
 	message: &'a str,
 	id: i32,
+	username: String,
 }
 
 pub async fn login(
@@ -23,17 +24,18 @@ pub async fn login(
 	extract::Json(data): extract::Json<AuthInput>,
 ) -> crate::RouteResult<impl IntoResponse> {
 	let hashed_password = hash(data.password);
-	let result: Result<i32, diesel::result::Error> = schema::user::table
-		.select(schema::user::id)
+	let result = schema::user::table
+		.select((schema::user::id, schema::user::username))
 		.filter(schema::user::username.eq(data.username))
 		.filter(schema::user::password.eq(hashed_password))
-		.get_result::<i32>(&mut state.connection().await?)
+		.get_result::<(i32, String)>(&mut state.connection().await?)
 		.await;
 
 	Ok(match result {
-		Ok(id) => Json(AuthResponse {
+		Ok((id, username)) => Json(AuthResponse {
 			message: "Logged in successfully.",
 			id,
+			username,
 		})
 		.into_response(),
 		Err(diesel::result::Error::NotFound) => {

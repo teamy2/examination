@@ -5,7 +5,7 @@
 <div style="display: flex;">
 	<div class="avatar p-10">
 		<div class="w-80 h-30">
-			<img src="https://i.stack.imgur.com/l60Hf.png" />
+			<img src="https://i.stack.imgur.com/l60Hf.png" alt="" />
 		</div>
 	</div>
 	<div style="padding: 50px">
