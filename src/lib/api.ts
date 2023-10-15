@@ -20,7 +20,7 @@ export type User = {
 };
 
 export async function getQuizzes(): Promise<Quiz[]> {
-	const response = await get('/quizzes/');
+	const response = await get('/quizzes');
 	const quizArray: Quiz[] = await response.json();
 	return quizArray;
 }
