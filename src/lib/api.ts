@@ -1,8 +1,8 @@
-const url = 'http://localhost:8000';
+const url = 'http://146.190.198.140:8001';
 
 export type Quiz = {
 	id?: number;
-	author: string;
+	author: number;
 	title: string;
 	description: string;
 	questions?: Question[];
@@ -71,7 +71,7 @@ export async function register(
 export async function createQuiz(quiz: Quiz): Promise<number | undefined> {
 	const response = await post<Quiz>('/quizzes/create', quiz);
 
-	if (response.status === 201) return undefined;
+	if (response.status !== 201) return undefined;
 
 	const json = await response.json();
 
