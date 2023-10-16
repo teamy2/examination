@@ -1,12 +1,28 @@
 <script lang="ts">
-	import { quizzes } from "$lib/quizzes";
-	import { createEventDispatcher } from "svelte";
+	import { login } from '$lib/api';
+	import { quizzes } from '$lib/quizzes';
+	import { createEventDispatcher } from 'svelte';
 
 	const dispatch = createEventDispatcher();
 
 	export let question: string;
 	export let options: string[];
-	//export let options: string[]
+	export let answers: Set<number>[];
+	export let currentQuestion: number;
+
+	const checks: boolean[] = [];
+
+	function handleCheck(currentQuestion: number, answer: number) {
+		if (!answers[currentQuestion]) {
+			answers[currentQuestion] = new Set();
+		}
+
+		if (answers[currentQuestion].has(answer)) {
+			answers[currentQuestion].delete(answer);
+		} else {
+			answers[currentQuestion].add(answer);
+		}
+	}
 </script>
 
 <div class="card bg-base-200 shadow-xl w-full">
@@ -16,7 +32,12 @@
 		<div class="grid gap-2">
 			{#each { length: options.length } as _, index}
 				<div class="flex flex-row items-center">
-					<input type="checkbox" class="checkbox col-span-1 checkbox-success" />
+					<input
+						type="checkbox"
+						class="checkbox col-span-1 checkbox-success"
+						on:click={() => handleCheck(currentQuestion - 1, index)}
+						checked={checks[index]}
+					/>
 					<div>{options}</div>
 				</div>
 			{/each}
