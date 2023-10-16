@@ -9,7 +9,9 @@ Examination is a web application that enables users to create, share, and take q
 ## How we built it
 
 Front-end: Svelte, TypeScript, Tailwind, DaisyUI
+
 Back-end: Rust
+
 Database: PostgreSQL
 
 ## Challenges we ran into
