@@ -11,13 +11,18 @@ use crate::models::{Question, Quiz, QuizExternal};
 use crate::schema;
 use crate::AppState;
 
+#[derive(serde::Serialize)]
+pub struct CreateOutput {
+	pub id: i32,
+}
+
 pub async fn create(
 	State(state): State<AppState>,
 	Json(mut data): Json<QuizExternal>,
-) -> crate::RouteResult<StatusCode> {
+) -> crate::RouteResult<(StatusCode, Json<CreateOutput>)> {
 	data.strip_id();
 
-	state
+	let id = state
 		.connection()
 		.await?
 		.transaction::<i32, diesel::result::Error, _>(|connection| {
@@ -56,7 +61,7 @@ pub async fn create(
 		.await
 		.map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
 
-	Ok(StatusCode::CREATED)
+	Ok((StatusCode::CREATED, Json(CreateOutput { id })))
 }
 
 pub async fn get_all(State(state): State<AppState>) -> crate::RouteResult<Json<Vec<QuizExternal>>> {
