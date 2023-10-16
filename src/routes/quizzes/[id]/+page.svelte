@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { getQuiz, submitQuiz, type Quiz } from '$lib/api';
-	import { user } from '$lib/auth';
+	import { isLoggedIn, user } from '$lib/auth';
 
 	import QuizAnswers from '$lib/components/QuizAnswers.svelte';
 
@@ -18,6 +18,8 @@
 	let submitted = false;
 
 	onMount(async () => {
+		if (!(await isLoggedIn())) return goto('/login');
+
 		quiz = await getQuiz(id);
 	});
 

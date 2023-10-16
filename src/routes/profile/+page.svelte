@@ -1,6 +1,18 @@
 <script>
+	import { user } from '$lib/auth';
+	import { onMount } from 'svelte';
 	import Quiz from '../../lib/components/Quiz.svelte';
+	import { goto } from '$app/navigation';
+	
+	
+	onMount( () => {
+		if(!$user){
+			goto('/login')
+		}
+	});
 </script>
+
+
 
 <div style="display: flex;">
 	<div class="avatar p-10">
@@ -9,7 +21,7 @@
 		</div>
 	</div>
 	<div style="padding: 50px">
-		<h1 style="font-size: 50px">Username</h1>
+		<h1 style="font-size: 50px">{$user?.username}</h1>
 		<h1>Description</h1>
 	</div>
 </div>

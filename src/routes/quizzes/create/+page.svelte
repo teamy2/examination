@@ -1,18 +1,24 @@
 <script lang="ts">
-	import { goto } from "$app/navigation";
-	import { createQuiz, type Question, type Quiz } from "$lib/api";
-	import { user } from "$lib/auth";
-	import QuizQuestions from "$lib/components/QuizQuestions.svelte";
-	import { onMount } from "svelte";
+	import { goto } from '$app/navigation';
+	import { createQuiz, type Question, type Quiz } from '$lib/api';
+	import { isLoggedIn, user } from '$lib/auth';
+	import QuizQuestions from '$lib/components/QuizQuestions.svelte';
+	import { onMount } from 'svelte';
+
+	onMount(async () => {
+		if (!(await isLoggedIn())) return goto('/login');
+	});
 
 	function defaultQuestion() {
 		return {
-			name: "",
+			name: '',
 			options: [],
 			answers: [],
 		};
 	}
+
 	let loading = false;
+
 	async function handleSubmit() {
 		loading = true;
 		const response = await createQuiz(q);
@@ -27,12 +33,10 @@
 
 	let q = {
 		author: 0,
-		title: "",
-		description: "",
+		title: '',
+		description: '',
 		questions: [defaultQuestion()] as Question[],
 	} satisfies Quiz;
-
-	user.subscribe((u) => (q.author = u?.id ?? 0));
 </script>
 
 <div class="pb-5">
