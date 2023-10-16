@@ -17,7 +17,7 @@
 	});
 </script>
 
-{#if $page.url.pathname === '/login' || $page.url.pathname === '/'}
+{#if $page.url.pathname === '/login' || $page.url.pathname === '/' || $page.url.pathname === '/register'}
 	<slot />
 {:else}
 	<div class="min-h-screen">
