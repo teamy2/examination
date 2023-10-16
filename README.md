@@ -1,10 +1,10 @@
+# Examination 📰
+
+A web application that enables users to create, share, and take quizzes. Users can also explore and take quizzes created by others and track their quiz progress.
+
 ## Inspiration
 
 The goal was to empower individuals to assist each other in their learning journeys
-
-## What it does
-
-Examination is a web application that enables users to create, share, and take quizzes. Users can also explore and take quizzes created by others and track their quiz progress.
 
 ## How we built it
 
