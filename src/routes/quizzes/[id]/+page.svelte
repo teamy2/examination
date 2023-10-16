@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { getQuiz, submitQuiz, type Quiz } from '$lib/api';
 	import { isLoggedIn, user } from '$lib/auth';
