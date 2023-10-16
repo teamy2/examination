@@ -24,7 +24,7 @@
 			<input
 				id="username"
 				type="text"
-				placeholder="Username"
+				placeholder="username"
 				class="input input-bordered"
 				required
 				bind:value={username}
