@@ -27,6 +27,11 @@
 				required
 				bind:value={username}
 			/>
+			{#if error}
+				<label class="label" for="username">
+					<span class="label-text text-error">{error}</span>
+				</label>
+			{/if}
 		</div>
 		<div class="form-control">
 			<label class="label">
@@ -39,6 +44,11 @@
 				required
 				bind:value={password}
 			/>
+			{#if error}
+				<label class="label" for="password">
+					<span class="label-text text-error">{error}</span>
+				</label>
+			{/if}
 		</div>
 		<div class="form-control mt-6">
 			<button class="btn btn-primary" on:click={handleRegister}>Register</button
