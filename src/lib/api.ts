@@ -64,8 +64,8 @@ export async function register(
 		username: username,
 		password: password,
 	});
-	console.log(response);
-	return response.status === 200;
+
+	return response.status === 201;
 }
 
 export async function createQuiz(quiz: Quiz): Promise<number | undefined> {
