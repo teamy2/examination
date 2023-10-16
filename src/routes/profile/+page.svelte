@@ -3,7 +3,7 @@
 	import { onMount } from 'svelte';
 	import QuizComponent from '../../lib/components/Quiz.svelte';
 	import { goto } from '$app/navigation';
-	import { getCompletedQuizzes, type Quiz } from '$lib/api';
+	import { getCompletedQuizzes, getCreatedQuizzes, type Quiz } from '$lib/api';
 
 	let loading = true;
 
@@ -14,7 +14,7 @@
 		if (!(await isLoggedIn())) return goto('/login');
 
 		completed = await getCompletedQuizzes($user?.id ?? 0);
-		created = await getCompletedQuizzes($user?.id ?? 0);
+		created = await getCreatedQuizzes($user?.id ?? 0);
 		loading = false;
 	});
 </script>

@@ -20,11 +20,10 @@
 <div class="grid place-items-center min-h-screen">
 	<form class="card-body" on:submit|preventDefault={login}>
 		<div class="form-control">
-			
 			<input
 				id="username"
 				type="text"
-				placeholder="username"
+				placeholder="Username"
 				class="input input-bordered"
 				required
 				bind:value={username}
@@ -36,11 +35,10 @@
 			{/if}
 		</div>
 		<div class="form-control">
-			
 			<input
 				id="password"
 				type="password"
-				placeholder="password"
+				placeholder="●●●●●●●●"
 				class="input input-bordered"
 				required
 				bind:value={password}

@@ -19,7 +19,7 @@
 		<div class="form-control">
 			<input
 				type="username"
-				placeholder="username"
+				placeholder="Username"
 				class="input input-bordered"
 				required
 				bind:value={username}
@@ -33,7 +33,7 @@
 		<div class="form-control">
 			<input
 				type="password"
-				placeholder="password"
+				placeholder="●●●●●●●●"
 				class="input input-bordered"
 				required
 				bind:value={password}
@@ -49,8 +49,7 @@
 			>
 		</div>
 		<div class="form-control">
-			<a class="btn btn-primary" href="/login">Already Have an Account?</a
-			>
+			<a class="btn btn-primary" href="/login">Already Have an Account?</a>
 		</div>
 	</form>
 </div>
