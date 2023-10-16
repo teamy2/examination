@@ -31,6 +31,11 @@
 				{#if $user}
 				<button class="btn ml-auto mr-6" on:click={() => {
 					$user = undefined;
+					goto("/quizzes")
+				}}> Quizzes
+				</button>
+				<button class="btn mr-6" on:click={() => {
+					$user = undefined;
 					goto("/login")
 				}}>
 					Logout
@@ -48,7 +53,12 @@
 					>
 				</a>
 				{:else}
-				<a href="/profile" class="mr-6 ml-auto">
+				<button class="btn ml-auto mr-6" on:click={() => {
+					$user = undefined;
+					goto("/quizzes")
+				}}> Quizzes
+				</button>
+				<a href="/profile" class="mr-6">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						width="24"
