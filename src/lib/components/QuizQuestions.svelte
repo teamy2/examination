@@ -26,10 +26,10 @@
 		/>
 
 		{#each { length: answersAmount } as _, index}
-			<div class="flex flex-row items-center gap-2 pl-2">
+			<div class="flex flex-row items-center gap-4 pl-2">
 				<input
 					type="checkbox"
-					class="checkbox col-span-1"
+					class="checkbox"
 					checked={question.answers.includes(index)}
 					on:click={() =>
 						question.answers.includes(index)
@@ -38,7 +38,7 @@
 				/>
 				<input
 					type="text"
-					class="input bg-base-200 w-6/12"
+					class="input bg-base-100 w-full"
 					placeholder="Insert option..."
 					bind:value={question.options[index]}
 				/>
