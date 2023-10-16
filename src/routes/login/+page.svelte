@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { user } from '$lib/auth';
 	import * as api from '$lib/api';
+	import { goto } from '$app/navigation';
 
 	let username = '';
 	let password = '';
@@ -12,6 +13,7 @@
 		if (!data) return (error = 'Invalid username or password');
 
 		$user = data;
+		goto('/quizzes');
 	}
 </script>
 

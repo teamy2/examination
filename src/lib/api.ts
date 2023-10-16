@@ -1,4 +1,4 @@
-const url = 'http://09a4-142-126-192-12.ngrok-free.app';
+const url = 'http://localhost:8000';
 
 export type Quiz = {
 	id?: number;
@@ -22,7 +22,7 @@ export type User = {
 export type UserData = {
 	id: number;
 	username: string;
-}
+};
 
 export async function getQuizzes(): Promise<Quiz[]> {
 	const response = await get('/quizzes');
@@ -64,19 +64,18 @@ export async function register(
 		username: username,
 		password: password,
 	});
+	console.log(response);
 	return response.status === 200;
 }
 
 export async function createQuiz(quiz: Quiz): Promise<number | undefined> {
 	const response = await post<Quiz>('/quizzes/create', quiz);
 
-	if (response.status === 201) 
-		return undefined;
+	if (response.status === 201) return undefined;
 
-		const json = await response.json();
+	const json = await response.json();
 
-		return json.id;
-	
+	return json.id;
 }
 
 export async function submitQuiz() {}
