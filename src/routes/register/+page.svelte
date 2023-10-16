@@ -17,12 +17,9 @@
 <div class="grid place-items-center min-h-screen">
 	<form class="card-body">
 		<div class="form-control">
-			<label class="label">
-				<span class="label-text">Username</span>
-			</label>
 			<input
-				type="email"
-				placeholder="email"
+				type="username"
+				placeholder="username"
 				class="input input-bordered"
 				required
 				bind:value={username}
@@ -34,9 +31,6 @@
 			{/if}
 		</div>
 		<div class="form-control">
-			<label class="label">
-				<span class="label-text">Password</span>
-			</label>
 			<input
 				type="password"
 				placeholder="password"
@@ -52,6 +46,10 @@
 		</div>
 		<div class="form-control mt-6">
 			<button class="btn btn-primary" on:click={handleRegister}>Register</button
+			>
+		</div>
+		<div class="form-control">
+			<a class="btn btn-primary" href="/login">Already Have an Account?</a
 			>
 		</div>
 	</form>
