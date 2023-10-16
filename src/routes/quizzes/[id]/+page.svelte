@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { getQuiz, type Quiz } from '$lib/api';
+	import { getQuiz, submitQuiz, type Quiz } from '$lib/api';
 
 	import QuizAnswers from '$lib/components/QuizAnswers.svelte';
 
@@ -10,10 +10,16 @@
 
 	let quiz: Quiz;
 	let curQuestion = 1;
+	let answers: Set<number>[] = [];
 
 	onMount(async () => {
 		quiz = await getQuiz(id);
 	});
+
+	function handleSubmit() {
+		console.log(answers);
+		//const response = await submitQuiz(answers);
+	}
 </script>
 
 {#if quiz}
@@ -27,6 +33,8 @@
 					By: {quiz.author}
 				</h1>
 				<QuizAnswers
+					{answers}
+					currentQuestion={curQuestion}
 					question={quiz.questions[curQuestion - 1].name}
 					options={quiz.questions[curQuestion - 1].options}
 				/>
@@ -47,6 +55,12 @@
 					>
 						Next
 					</button>
+
+					{#if curQuestion == quiz.questions.length}
+						<button class="btn btn-primary" on:click={handleSubmit}>
+							Submit
+						</button>
+					{/if}
 				</div>
 			</div>
 			<label for="my-drawer-2" class="btn btn-primary drawer-button lg:hidden"
