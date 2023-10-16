@@ -9,6 +9,7 @@
 	export let options: string[];
 	export let answers: Set<number>[];
 	export let currentQuestion: number;
+	export let results: boolean[][] | undefined;
 
 	const checks: boolean[] = [];
 
@@ -34,9 +35,13 @@
 				<div class="flex flex-row items-center">
 					<input
 						type="checkbox"
-						class="checkbox col-span-1 checkbox-success"
+						class="checkbox col-span-1"
 						on:click={() => handleCheck(currentQuestion - 1, index)}
 						checked={checks[index]}
+						class:checkbox-success={results &&
+							results[currentQuestion - 1][index]}
+						class:checkbox-error={results &&
+							!results[currentQuestion - 1][index]}
 					/>
 					<div>{options}</div>
 				</div>

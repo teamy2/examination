@@ -1,4 +1,4 @@
-const url = 'http://146.190.198.140:8001';
+const url = 'https://api.healthhunt.xyz';
 
 export type Quiz = {
 	id?: number;
@@ -78,7 +78,12 @@ export async function createQuiz(quiz: Quiz): Promise<number | undefined> {
 	return json.id;
 }
 
-export async function submitQuiz() {}
+export async function submitQuiz(quizId: number, userId: number, answers: Set<number>[]): Promise<{ results: boolean[][], correct_count: number } | undefined> {
+	const response = await post(`/quizzes/${quizId}/complete?user=${userId}`, answers.map(a => [...a]));
+	if (response.status !== 200) return undefined;
+
+	return response.json();
+}
 
 function post<T>(path: string, body: T): Promise<Response> {
 	return fetch(url + path, {
