@@ -30,7 +30,6 @@
 				>
 				{#if $user}
 				<button class="btn ml-auto mr-6" on:click={() => {
-					$user = undefined;
 					goto("/quizzes")
 				}}> Quizzes
 				</button>
@@ -54,7 +53,6 @@
 				</a>
 				{:else}
 				<button class="btn ml-auto mr-6" on:click={() => {
-					$user = undefined;
 					goto("/quizzes")
 				}}> Quizzes
 				</button>
