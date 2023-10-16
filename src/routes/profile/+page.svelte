@@ -24,9 +24,9 @@
 		<span class="loading loading-dots loading-lg" />
 	</div>
 {:else}
-	<div class="flex">
-		<div class="avatar p-10">
-			<div class="w-80 h-30 rounded-full">
+	<div class="flex justify-center flex-row place-items-center mt-16">
+		<div class="avatar">
+			<div class="w-24 h-24 rounded-full">
 				<img
 					src="https://i.stack.imgur.com/l60Hf.png"
 					alt=""
@@ -35,27 +35,45 @@
 			</div>
 		</div>
 		<div style="padding: 50px">
-			<h1 style="font-size: 50px">{$user?.username}</h1>
-			<h1>Description</h1>
+			<h1 class="text-4xl">Welcome back,</h1>
+			<h1 class="text-6xl font-bold">{$user?.username}</h1>
 		</div>
 	</div>
 
-	<div class="align-middle justify-center content-center text-center">
-		<h1 class="card-body text-3xl justify-center">My Quizzes</h1>
-	</div>
-	<div class="flex gap-10 justify-center border-spacing-y-6 p-10">
-		{#each created as quiz}
-			<QuizComponent {quiz} />
-		{/each}
-	</div>
+	<div class="flex justify-center">
+		<div class="grid grid-cols-2 max-w-5xl">
+			<div>
+				<div class="align-middle justify-center content-center text-center">
+					<h1 class="card-body text-3xl justify-center">Your creations</h1>
+				</div>
+				<div class="flex gap-10 justify-center border-spacing-y-6 p-10">
+					{#each created as quiz}
+						<QuizComponent {quiz} />
+					{/each}
 
-	<div>
-		<h1 class="card-body text-3xl text-center">Completed Quizzes</h1>
-	</div>
-	<div class="flex gap-10 justify-center border-spacing-y-6 p-10">
-		{#each completed as quiz}
-			<QuizComponent {quiz} completed />
-		{/each}
+					{#if !created.length}
+						<div class="text-center">You haven't created any quizzes yet!</div>
+					{/if}
+				</div>
+			</div>
+
+			<div>
+				<div>
+					<h1 class="card-body text-3xl text-center">Your completed quizzes</h1>
+				</div>
+				<div class="flex gap-10 justify-center border-spacing-y-6 p-10">
+					{#each completed as quiz}
+						<QuizComponent {quiz} completed />
+					{/each}
+
+					{#if !completed.length}
+						<div class="text-center">
+							You haven't completed any quizzes yet!
+						</div>
+					{/if}
+				</div>
+			</div>
+		</div>
 	</div>
 {/if}
 
