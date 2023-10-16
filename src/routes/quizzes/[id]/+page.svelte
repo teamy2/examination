@@ -15,20 +15,22 @@
 	let correct: number | undefined;
 	let results: boolean[][];
 
+	let submitted = false;
+
 	onMount(async () => {
 		quiz = await getQuiz(id);
 	});
 
 	async function handleSubmit() {
+		submitted = true;
+
 		const response = await submitQuiz(quiz.id!, $user?.id ?? 0, answers);
 
 		correct = response?.correct_count ?? 0;
 		results = response?.results ?? [];
 
 		if (response) {
-			answers = [];
 			curQuestion = 0;
-			quiz = await getQuiz(id);
 		}
 	}
 </script>
@@ -37,11 +39,13 @@
 	<div class="drawer lg:drawer-open">
 		<input id="my-drawer-2" type="checkbox" class="drawer-toggle" />
 		<div class="drawer-content flex flex-col">
-			<div class="h-20 content-center">
-				<h1 class="top-8 text-3xl">{quiz.title}</h1>
-				<h1>
-					By: {quiz.author}
-				</h1>
+			<div class="content-center p-8 lg:p-12 grid gap-8">
+				<span>
+					<h1 class="top-8 text-5xl text-center">{quiz.title}</h1>
+					<h1 class="text-center">
+						by <span class="font-bold">{quiz.author}</span>
+					</h1>
+				</span>
 
 				{#if correct !== undefined}
 					You got {correct} / {quiz.questions?.length ?? 0} correct!
@@ -54,13 +58,12 @@
 					question={quiz.questions[curQuestion].name}
 					options={quiz.questions[curQuestion].options}
 				/>
-				<div class="flex gap-6 p-6">
+
+				<div class="flex gap-6">
 					{#if curQuestion !== 0}
 						<button
-							class="btn btn-primary"
-							on:click={() => {
-								if (curQuestion > 1) curQuestion--;
-							}}
+							class="btn btn-primary btn-lg"
+							on:click={() => curQuestion--}
 						>
 							Back
 						</button>
@@ -68,7 +71,7 @@
 
 					{#if curQuestion !== quiz.questions.length - 1}
 						<button
-							class="btn btn-primary"
+							class="btn btn-primary btn-lg"
 							on:click={() => {
 								if (curQuestion < quiz.questions.length - 1) curQuestion++;
 							}}
@@ -77,8 +80,11 @@
 						</button>
 					{/if}
 
-					{#if curQuestion === quiz.questions.length}
-						<button class="btn btn-primary" on:click={handleSubmit}>
+					{#if !submitted && curQuestion === quiz.questions.length - 1}
+						<button
+							class="btn btn-primary btn-lg ml-auto"
+							on:click={handleSubmit}
+						>
 							Submit
 						</button>
 					{/if}
@@ -95,11 +101,10 @@
 				class="drawer-overlay"
 			/>
 			<ul class="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
-				<!-- Sidebar content here -->
 				{#each quiz.questions ?? [] as question, index}
 					<li>
 						<button on:click={() => (curQuestion = index)}
-							>Question {index + 1}</button
+							>{index + 1}. {question.name}</button
 						>
 					</li>
 				{/each}

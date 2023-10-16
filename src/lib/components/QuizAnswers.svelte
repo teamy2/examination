@@ -1,17 +1,9 @@
 <script lang="ts">
-	import { login } from '$lib/api';
-	import { quizzes } from '$lib/quizzes';
-	import { createEventDispatcher } from 'svelte';
-
-	const dispatch = createEventDispatcher();
-
 	export let question: string;
 	export let options: string[];
 	export let answers: Set<number>[];
 	export let currentQuestion: number;
 	export let results: boolean[][] | undefined;
-
-	const checks: boolean[] = [];
 
 	function handleCheck(currentQuestion: number, answer: number) {
 		if (!answers[currentQuestion]) {
@@ -26,28 +18,25 @@
 	}
 </script>
 
-<div class="card bg-base-200 shadow-xl w-full">
-	<div class="card-body">
-		<div class="w-full max-w-xs card-title">{question}</div>
+<div class="card bg-base-300 shadow-xl w-full">
+	<div class="card-body relative">
+		<div class="absolute top-6 right-6 text-xl">#{currentQuestion + 1}</div>
+		<div class="w-full max-w-xs text-3xl pb-6">{question}</div>
 
-		<div class="grid gap-2">
+		<div class="grid gap-3">
 			{#each { length: options.length } as _, index}
-				<div class="flex flex-row items-center">
+				<div class="flex flex-row items-center gap-2">
 					<input
 						type="checkbox"
 						class="checkbox col-span-1"
-						on:click={() => handleCheck(currentQuestion - 1, index)}
-						checked={checks[index]}
-						class:checkbox-success={results &&
-							results[currentQuestion - 1][index]}
-						class:checkbox-error={results &&
-							!results[currentQuestion - 1][index]}
+						on:click={() => handleCheck(currentQuestion, index)}
+						checked={answers[currentQuestion]?.has(index)}
+						class:checkbox-success={results && results[currentQuestion][index]}
+						class:checkbox-error={results && !results[currentQuestion][index]}
 					/>
-					<div>{options}</div>
+					<div>{options[index]}</div>
 				</div>
 			{/each}
 		</div>
-
-		<div class="card-actions justify-end" />
 	</div>
 </div>

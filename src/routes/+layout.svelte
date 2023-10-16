@@ -1,27 +1,27 @@
 <!-- @format -->
 <script lang="ts">
-	import { page } from "$app/stores";
-	import { user } from "$lib/auth";
-	import { onMount } from "svelte";
+	import { page } from '$app/stores';
+	import { user } from '$lib/auth';
+	import { onMount } from 'svelte';
 
-	import "../app.css";
+	import '../app.css';
 
 	onMount(() => {
-		const u = localStorage.getItem("user");
+		const u = localStorage.getItem('user');
 		if (u) user.set(JSON.parse(u));
 
-		user.subscribe((u) => {
-			if (u) localStorage.setItem("user", JSON.stringify(u));
-			else localStorage.removeItem("user");
+		user.subscribe(u => {
+			if (u) localStorage.setItem('user', JSON.stringify(u));
+			else localStorage.removeItem('user');
 		});
 	});
 </script>
 
-{#if $page.url.pathname === "/login" || $page.url.pathname === "/"}
+{#if $page.url.pathname === '/login' || $page.url.pathname === '/'}
 	<slot />
 {:else}
 	<div class="min-h-screen">
-		<div class="navbar">
+		<div class="navbar bg-base-200">
 			<div class="flex-1">
 				<a href="/" class="btn btn-ghost normal-case text-xl red">Examination</a
 				>
