@@ -11,7 +11,7 @@
 	};
 </script>
 
-<div class="card w-96 bg-base-200 shadow-xl">
+<div class="card w-full bg-base-200 shadow-xl">
 	<div class="card-body">
 		<button
 			on:click={() => dispatch('remove')}
@@ -21,7 +21,7 @@
 		<input
 			type="text"
 			placeholder="Question"
-			class="input w-48 card-title my-4"
+			class="input w-6/12 card-title my-4"
 			bind:value={question.name}
 		/>
 
@@ -40,7 +40,7 @@
 				/>
 				<input
 					type="text"
-					class="input bg-base-200"
+					class="input bg-base-200 w-6/12"
 					placeholder="Answer {index + 1}"
 					bind:value={question.options[index]}
 				/>

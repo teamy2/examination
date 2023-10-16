@@ -56,7 +56,7 @@
 	</div>
 
 	{#each q.questions as _, index}
-		<div class="py-4">
+		<div class="py-4 w-6/12">
 			<QuizQuestions
 				bind:question={q.questions[index]}
 				on:remove={() => {
