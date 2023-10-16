@@ -3,11 +3,21 @@
 
 	export let completed = false;
 	export let quiz: Quiz;
+
+	function randomPastelColour() {
+		// create random nice light-ish pastel colours
+		const hue = Math.floor(Math.random() * 360);
+		const saturation = Math.floor(Math.random() * 30) + 70;
+		const lightness = Math.floor(Math.random() * 20) + 80;
+
+		return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+	}
 </script>
 
 <a href="/quizzes/{quiz.id}">
 	<div
 		class="card w-full bg-base-300 shadow-xl image-full hover:scale-105 transition-all duration-300 cursor-pointer min-h-[20rem]"
+		style="background-color: {randomPastelColour()};"
 	>
 		<div class="card-body">
 			{#if completed}
