@@ -21,7 +21,7 @@
 <div class="card bg-base-300 shadow-xl w-full">
 	<div class="card-body relative">
 		<div class="absolute top-6 right-6 text-xl">#{currentQuestion + 1}</div>
-		<div class="w-full max-w-xs text-3xl pb-6">{question}</div>
+		<div class="w-full text-3xl pb-6">{question}</div>
 
 		<div class="grid gap-3">
 			{#each { length: options.length } as _, index}
