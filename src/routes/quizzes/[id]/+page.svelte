@@ -10,7 +10,7 @@
 	const id = parseInt($page.params.id);
 
 	let quiz: Quiz;
-	let curQuestion = 1;
+	let curQuestion = 0;
 	let answers: Set<number>[] = [];
 	let correct: number | undefined;
 	let results: boolean[][];
@@ -27,7 +27,7 @@
 
 		if (response) {
 			answers = [];
-			curQuestion = 1;
+			curQuestion = 0;
 			quiz = await getQuiz(id);
 		}
 	}
@@ -51,8 +51,8 @@
 					{answers}
 					{results}
 					currentQuestion={curQuestion}
-					question={quiz.questions[curQuestion - 1].name}
-					options={quiz.questions[curQuestion - 1].options}
+					question={quiz.questions[curQuestion].name}
+					options={quiz.questions[curQuestion].options}
 				/>
 				<div class="flex gap-6 p-6">
 					{#if curQuestion !== 0}
@@ -66,11 +66,11 @@
 						</button>
 					{/if}
 
-					{#if curQuestion !== quiz.questions.length}
+					{#if curQuestion !== quiz.questions.length - 1}
 						<button
 							class="btn btn-primary"
 							on:click={() => {
-								if (curQuestion < quiz.questions.length) curQuestion++;
+								if (curQuestion < quiz.questions.length - 1) curQuestion++;
 							}}
 						>
 							Next
@@ -98,7 +98,7 @@
 				<!-- Sidebar content here -->
 				{#each quiz.questions ?? [] as question, index}
 					<li>
-						<button on:click={() => (curQuestion = index + 1)}
+						<button on:click={() => (curQuestion = index)}
 							>Question {index + 1}</button
 						>
 					</li>

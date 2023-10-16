@@ -41,7 +41,7 @@
 						class:checkbox-error={results &&
 							!results[currentQuestion - 1][index]}
 					/>
-					<div>{options}</div>
+					<div>{options[index]}</div>
 				</div>
 			{/each}
 		</div>
