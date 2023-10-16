@@ -7,7 +7,7 @@
 
 <a href="/quizzes/{quiz.id}">
 	<div
-		class="card w-96 bg-base-300 shadow-xl image-full hover:scale-105 transition-all duration-300 cursor-pointer"
+		class="card w-full bg-base-300 shadow-xl image-full hover:scale-105 transition-all duration-300 cursor-pointer min-h-[20rem]"
 	>
 		<div class="card-body">
 			{#if completed}
@@ -25,8 +25,8 @@
 				</svg>
 			{/if}
 
-			<h2 class="card-title">{quiz.title}</h2>
-			<p>{quiz.description}</p>
+			<h2 class="card-title asd">{quiz.title}</h2>
+			<p class="line-clamp-5 whitespace-pre-line">{quiz.description}</p>
 		</div>
 	</div>
 </a>

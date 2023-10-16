@@ -29,6 +29,7 @@
   },
   "type": "module",
   "dependencies": {
+    "@tailwindcss/line-clamp": "^0.4.4",
     "daisyui": "^3.9.2"
   }
 }

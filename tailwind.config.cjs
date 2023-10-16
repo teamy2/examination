@@ -7,6 +7,7 @@ const config = {
 		extend: {},
 	},
 	plugins: [
+		require('@tailwindcss/line-clamp'),
 		require('daisyui')
 	],
 	daisyui: {
