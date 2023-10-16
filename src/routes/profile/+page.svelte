@@ -1,13 +1,20 @@
-<script>
+<script lang="ts">
 	import { isLoggedIn, user } from '$lib/auth';
 	import { onMount } from 'svelte';
-	import Quiz from '../../lib/components/Quiz.svelte';
+	import QuizComponent from '../../lib/components/Quiz.svelte';
 	import { goto } from '$app/navigation';
+	import { getCompletedQuizzes, type Quiz } from '$lib/api';
 
 	let loading = true;
 
+	let completed: Quiz[] = [];
+	let created: Quiz[] = [];
+
 	onMount(async () => {
 		if (!(await isLoggedIn())) return goto('/login');
+
+		completed = await getCompletedQuizzes($user?.id ?? 0);
+		created = await getCompletedQuizzes($user?.id ?? 0);
 		loading = false;
 	});
 </script>
@@ -17,7 +24,7 @@
 		<span class="loading loading-dots loading-lg" />
 	</div>
 {:else}
-	<div style="display: flex;">
+	<div class="flex">
 		<div class="avatar p-10">
 			<div class="w-80 h-30 rounded-full">
 				<img
@@ -34,48 +41,21 @@
 	</div>
 
 	<div class="align-middle justify-center content-center text-center">
-		<h1 class="card-body text-3xl border-b-2 justify-center">My Quizzes</h1>
+		<h1 class="card-body text-3xl justify-center">My Quizzes</h1>
 	</div>
 	<div class="flex gap-10 justify-center border-spacing-y-6 p-10">
-		<div class="card w-96 bg-base-100 shadow-xl image-full">
-			<figure>
-				<img
-					src="/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg"
-					alt="Shoes"
-				/>
-			</figure>
-			<div class="card-body">
-				<h2 class="card-title">Title</h2>
-				<p>Description</p>
-				<div class="card-actions justify-end">
-					<button class="btn btn-primary">Edit</button>
-				</div>
-			</div>
-		</div>
-		<Quiz title="Title1" description="desc1" completed={true} />
+		{#each created as quiz}
+			<QuizComponent {quiz} />
+		{/each}
 	</div>
 
 	<div>
-		<h1 class="card-body text-3xl border-b-2 text-center">Completed Quizzes</h1>
+		<h1 class="card-body text-3xl text-center">Completed Quizzes</h1>
 	</div>
 	<div class="flex gap-10 justify-center border-spacing-y-6 p-10">
-		<div class="card w-96 bg-base-100 shadow-xl image-full">
-			<figure>
-				<img
-					src="/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg"
-					alt="Shoes"
-				/>
-			</figure>
-			<div class="card-body">
-				<h2 class="card-title">Shoes!</h2>
-				<p>If a dog chews shoes whose shoes does he choose?</p>
-				<div class="card-actions justify-end">
-					<button class="btn btn-primary">View Results</button>
-				</div>
-			</div>
-		</div>
-
-		<Quiz title="Title2" description="desc2" completed={false} />
+		{#each completed as quiz}
+			<QuizComponent {quiz} completed />
+		{/each}
 	</div>
 {/if}
 

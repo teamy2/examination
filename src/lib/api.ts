@@ -36,8 +36,14 @@ export async function getQuiz(id: number): Promise<Quiz> {
 	return quiz;
 }
 
-export async function getCreatedQuizzes(): Promise<Quiz[]> {
-	const response = await get('/quizzes/created');
+export async function getCreatedQuizzes(userId: number): Promise<Quiz[]> {
+	const response = await get(`/quizzes/created?user=${userId}`);
+	const quizArray: Quiz[] = await response.json();
+	return quizArray;
+}
+
+export async function getCompletedQuizzes(userId: number): Promise<Quiz[]> {
+	const response = await get(`/quizzes/completed?user=${userId}`);
 	const quizArray: Quiz[] = await response.json();
 	return quizArray;
 }
