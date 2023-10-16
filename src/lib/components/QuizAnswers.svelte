@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { login } from '$lib/api';
-	import { quizzes } from '$lib/quizzes';
 	import { createEventDispatcher } from 'svelte';
 
 	const dispatch = createEventDispatcher();

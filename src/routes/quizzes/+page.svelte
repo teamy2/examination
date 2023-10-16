@@ -9,7 +9,11 @@
 	});
 </script>
 
-<h1 class="text-center text-3xl py-8">Available Quizzes</h1>
+<div class="flex-column text-center">
+	<h1 class="text-center text-3xl py-8">Available Quizzes</h1>
+	<a href="/quizzes/create" class="btn"> Create a quiz </a>
+</div>
+
 <div class="flex flex-row flex-wrap justify-center">
 	{#each quizzes as quiz, index}
 		<a href="/quizzes/{quiz.id}">
