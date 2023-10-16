@@ -3,7 +3,7 @@
 		<div class="hero-content text-center">
 			<div class="">
 				<h1 class="text-5xl font-bold">Welcome to Examination!</h1>
-				<p class="py-6">Create quizzes to diagnose others.</p>
+				<p class="py-6">Create quizzes to help others.</p>
 				<a href="/quizzes" class="btn btn-success">Get Started</a>
 			</div>
 		</div>
