@@ -1,16 +1,8 @@
-<script>
-	/**
-	 * @type {any}
-	 */
-	export let completed;
-	/**
-	 * @type {any}
-	 */
-	export let title;
-	/**
-	 * @type {any}
-	 */
-	export let description;
+<script lang="ts">
+	import type { Quiz } from '$lib/api';
+
+	export let completed = false;
+	export let quiz: Quiz;
 </script>
 
 <div
@@ -32,7 +24,7 @@
 			</svg>
 		{/if}
 
-		<h2 class="card-title">{title}</h2>
-		<p>{description}</p>
+		<h2 class="card-title">{quiz.title}</h2>
+		<p>{quiz.description}</p>
 	</div>
 </div>
