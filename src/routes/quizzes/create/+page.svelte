@@ -39,20 +39,24 @@
 	} satisfies Quiz;
 </script>
 
-<div class="pb-5">
-	<input
-		type="text"
-		placeholder="Quiz Name"
-		class="input input-bordered input-info w-full max-w-xs"
-		bind:value={q.title}
-	/>
-	<label class="btn btn-info" for="bg-select">Choose Thumbnail</label>
-	<input id="bg-select" type="file" class="file-input w-full max-w-xs" hidden />
-</div>
+<div class="flex flex-col gap-4 p-8 items-center">
+	<div class="flex items-center gap-8">
+		<input
+			type="text"
+			placeholder="Quiz Name"
+			class="input input-bordered w-40 max-w-ws"
+			bind:value={q.title}
+		/>
 
-<div class="flex justify-center gap-8 flex-col place-items-center">
-	<div class="grid gap-3 max-w-5xl w-full">
-		{#each q.questions as _, index}
+		<textarea
+			class="textarea textarea-bordered"
+			placeholder="Description"
+			bind:value={q.description}
+		/>
+	</div>
+
+	{#each q.questions as _, index}
+		<div class="py-4">
 			<QuizQuestions
 				bind:question={q.questions[index]}
 				on:remove={() => {
@@ -60,19 +64,20 @@
 					q = q;
 				}}
 			/>
-		{/each}
-	</div>
+		</div>
+	{/each}
+
 	<button
-		class="btn btn-neutral w-full max-w-5xl h-32 text-2xl uppercase"
+		class="btn"
 		on:click={() => {
 			q.questions.push(defaultQuestion());
 			q = q;
 		}}>Add question</button
 	>
-</div>
 
-<button
-	class="btn btn-ghost"
-	disabled={loading || !q.questions.length}
-	on:click={handleSubmit}>Create Quiz!</button
->
+	<button
+		class="btn"
+		disabled={loading || !q.questions.length}
+		on:click={handleSubmit}>Create Quiz!</button
+	>
+</div>
